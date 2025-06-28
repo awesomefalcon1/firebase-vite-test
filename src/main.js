@@ -17,7 +17,9 @@ class FirebaseUploadApp {
     this.setupServices();
     this.renderApp();
     this.setupEventListeners();
+    // Auto sign-in anonymously on app start
     this.authService.init();
+    this.authService.signInAnonymously();
   }
 
   setupServices() {
@@ -35,10 +37,6 @@ class FirebaseUploadApp {
       this.uiComponents.showError(`Upload failed: ${error.message}`);
       this.uiComponents.hideProgress();
     });
-
-    this.authService.setAuthStateCallback((user) => {
-      this.uiComponents.updateAuthStatus(user);
-    });
   }
 
   renderApp() {
@@ -52,15 +50,6 @@ class FirebaseUploadApp {
   }
 
   setupEventListeners() {
-    // Sign in button
-    document.getElementById('sign-in-btn').addEventListener('click', async () => {
-      try {
-        await this.authService.signInAnonymously();
-      } catch (error) {
-        this.uiComponents.showError(`Authentication failed: ${error.message}`);
-      }
-    });
-
     // File input
     const fileInput = document.getElementById('file-input');
     fileInput.addEventListener('change', (e) => {
@@ -98,11 +87,6 @@ class FirebaseUploadApp {
     document.getElementById('upload-btn').addEventListener('click', async () => {
       if (this.selectedFiles.length === 0) {
         this.uiComponents.showError('Please select files to upload');
-        return;
-      }
-
-      if (!this.authService.isAuthenticated()) {
-        this.uiComponents.showError('Please sign in first');
         return;
       }
 

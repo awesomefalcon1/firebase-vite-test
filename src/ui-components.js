@@ -13,22 +13,17 @@ export class UIComponents {
     return `
       <div class="upload-section">
         <h2>Firebase Storage Upload Test</h2>
-        
-        <div class="auth-status" id="auth-status">
-          <p>Authentication Status: <span id="auth-indicator">Not authenticated</span></p>
-          <button id="sign-in-btn" class="auth-btn">Sign In Anonymously</button>
-        </div>
 
         <div class="upload-area" id="upload-area">
           <div class="file-input-wrapper">
-            <input type="file" id="file-input" multiple accept="*/*" disabled>
+            <input type="file" id="file-input" multiple accept="*/*">
             <label for="file-input" class="file-input-label">
               <span>Choose Files or Drag & Drop</span>
             </label>
           </div>
           
           <div class="upload-controls">
-            <button id="upload-btn" class="upload-btn" disabled>Upload Files</button>
+            <button id="upload-btn" class="upload-btn">Upload Files</button>
             <button id="clear-btn" class="clear-btn">Clear Selection</button>
           </div>
         </div>
@@ -51,27 +46,6 @@ export class UIComponents {
         </div>
       </div>
     `;
-  }
-
-  updateAuthStatus(user) {
-    const authIndicator = document.getElementById('auth-indicator');
-    const signInBtn = document.getElementById('sign-in-btn');
-    const fileInput = document.getElementById('file-input');
-    const uploadBtn = document.getElementById('upload-btn');
-
-    if (user) {
-      authIndicator.textContent = `Authenticated (${user.uid})`;
-      authIndicator.className = 'authenticated';
-      signInBtn.style.display = 'none';
-      fileInput.disabled = false;
-      uploadBtn.disabled = false;
-    } else {
-      authIndicator.textContent = 'Not authenticated';
-      authIndicator.className = 'not-authenticated';
-      signInBtn.style.display = 'inline-block';
-      fileInput.disabled = true;
-      uploadBtn.disabled = true;
-    }
   }
 
   updateProgress(progress) {
