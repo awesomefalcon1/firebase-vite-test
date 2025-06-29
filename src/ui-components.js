@@ -1,12 +1,10 @@
 export class UIComponents {
   constructor() {
     this.uploadService = null;
-    this.authService = null;
   }
 
-  setServices(uploadService, authService) {
+  setServices(uploadService) {
     this.uploadService = uploadService;
-    this.authService = authService;
   }
 
   createFileUploadSection() {

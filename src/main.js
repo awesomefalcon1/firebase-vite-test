@@ -1,12 +1,10 @@
 import './style.css'
 import { UploadService } from './upload-service.js';
-import { AuthService } from './auth-service.js';
 import { UIComponents } from './ui-components.js';
 
 class FirebaseUploadApp {
   constructor() {
     this.uploadService = new UploadService();
-    this.authService = new AuthService();
     this.uiComponents = new UIComponents();
     this.selectedFiles = [];
     
@@ -17,13 +15,10 @@ class FirebaseUploadApp {
     this.setupServices();
     this.renderApp();
     this.setupEventListeners();
-    // Auto sign-in anonymously on app start
-    this.authService.init();
-    this.authService.signInAnonymously();
   }
 
   setupServices() {
-    this.uiComponents.setServices(this.uploadService, this.authService);
+    this.uiComponents.setServices(this.uploadService);
     
     this.uploadService.setProgressCallback((progress) => {
       this.uiComponents.updateProgress(progress);
