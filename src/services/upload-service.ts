@@ -1,27 +1,32 @@
-import { storage } from './firebase-config.js';
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { storage } from './firebase-config';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
-export class UploadService {
-  constructor() {
-    this.uploadProgress = 0;
-    this.onProgressCallback = null;
-    this.onCompleteCallback = null;
-    this.onErrorCallback = null;
-  }
+interface UploadResult {
+  downloadURL: string;
+  fileName: string;
+  size: number;
+  type: string;
+}
 
-  setProgressCallback(callback) {
+class UploadService {
+  private uploadProgress: number = 0;
+  private onProgressCallback: ((progress: number) => void) | null = null;
+  private onCompleteCallback: ((downloadURL: string) => void) | null = null;
+  private onErrorCallback: ((error: Error) => void) | null = null;
+
+  setProgressCallback(callback: (progress: number) => void): void {
     this.onProgressCallback = callback;
   }
 
-  setCompleteCallback(callback) {
+  setCompleteCallback(callback: (downloadURL: string) => void): void {
     this.onCompleteCallback = callback;
   }
 
-  setErrorCallback(callback) {
+  setErrorCallback(callback: (error: Error) => void): void {
     this.onErrorCallback = callback;
   }
 
-  async uploadFile(file, path = 'uploads/') {
+  async uploadFile(file: File, path: string = 'uploads/'): Promise<UploadResult> {
     try {
       // Create a reference to the file location
       const fileName = `${Date.now()}_${file.name}`;
@@ -79,8 +84,10 @@ export class UploadService {
     }
   }
 
-  async uploadMultipleFiles(files, path = 'uploads/') {
+  async uploadMultipleFiles(files: File[], path: string = 'uploads/'): Promise<UploadResult[]> {
     const uploadPromises = Array.from(files).map(file => this.uploadFile(file, path));
     return Promise.all(uploadPromises);
   }
 }
+
+export const uploadService = new UploadService();
